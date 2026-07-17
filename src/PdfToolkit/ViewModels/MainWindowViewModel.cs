@@ -19,7 +19,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _statusText = "Ready";
 
     [ObservableProperty]
-    private int _selectedToolIndex;
+    private int _selectedToolIndex = -1;
 
     [ObservableProperty]
     private UserControl? _currentToolView;
@@ -55,6 +55,12 @@ public partial class MainWindowViewModel : ViewModelBase
     private void LoadToolView(int index)
     {
         if (_window == null) return;
+
+        if (index < 0)
+        {
+            CurrentToolView = null;
+            return;
+        }
 
         if (_toolViews.TryGetValue(index, out var existing))
         {
