@@ -1,23 +1,22 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
     QComboBox,
-    QSpinBox,
+    QHBoxLayout,
+    QLabel,
     QLineEdit,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt
+
 from src.utils.file_ops import (
-    open_pdf_path,
-    open_image_path,
-    save_pdf_path,
-    save_image_path,
-    info_box,
     error_box,
+    info_box,
+    open_pdf_path,
     page_range_from_str,
+    save_image_path,
+    save_pdf_path,
 )
 
 
@@ -28,9 +27,7 @@ class ConvertTool(QWidget):
         self.doc = None
         layout = QVBoxLayout(self)
 
-        layout.addWidget(
-            QLabel("Convert — Export pages as images or import images into PDF.")
-        )
+        layout.addWidget(QLabel("Convert — Export pages as images or import images into PDF."))
 
         # PDF to Images
         pdf_group = QVBoxLayout()

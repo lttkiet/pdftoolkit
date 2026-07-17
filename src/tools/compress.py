@@ -1,16 +1,16 @@
 import fitz
-from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QPushButton,
-    QLabel,
-    QSpinBox,
-    QSlider,
-    QCheckBox,
-)
 from PySide6.QtCore import Qt
-from src.utils.file_ops import open_pdf_path, save_pdf_path, info_box, error_box
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSlider,
+    QVBoxLayout,
+    QWidget,
+)
+
+from src.utils.file_ops import error_box, info_box, open_pdf_path, save_pdf_path
 
 
 class CompressTool(QWidget):
@@ -21,9 +21,7 @@ class CompressTool(QWidget):
         layout = QVBoxLayout(self)
 
         layout.addWidget(
-            QLabel(
-                "Compress PDF — Reduce file size by optimizing images and structure."
-            )
+            QLabel("Compress PDF — Reduce file size by optimizing images and structure.")
         )
 
         self.open_btn = QPushButton("Open PDF...")
@@ -42,9 +40,7 @@ class CompressTool(QWidget):
         self.quality_slider.setTickInterval(10)
         row.addWidget(self.quality_slider)
         self.quality_label = QLabel("50")
-        self.quality_slider.valueChanged.connect(
-            lambda v: self.quality_label.setText(str(v))
-        )
+        self.quality_slider.valueChanged.connect(lambda v: self.quality_label.setText(str(v)))
         row.addWidget(self.quality_label)
         layout.addLayout(row)
 
@@ -95,6 +91,7 @@ class CompressTool(QWidget):
                         if ext not in ("png", "jpeg", "jpg"):
                             continue
                         import io
+
                         from PIL import Image as PILImage
 
                         pil_img = PILImage.open(io.BytesIO(image_bytes))

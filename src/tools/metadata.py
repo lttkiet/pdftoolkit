@@ -1,9 +1,15 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QLineEdit, QFormLayout
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from src.utils.file_ops import open_pdf_path, save_pdf_path, info_box, error_box
+
+from src.utils.file_ops import error_box, info_box, open_pdf_path, save_pdf_path
 
 
 class MetadataTool(QWidget):
@@ -86,14 +92,16 @@ class MetadataTool(QWidget):
         try:
             new_doc = fitz.open()
             new_doc.insert_pdf(self.doc)
-            new_doc.set_metadata({
-                "title": self.title_edit.text(),
-                "author": self.author_edit.text(),
-                "subject": self.subject_edit.text(),
-                "keywords": self.keywords_edit.text(),
-                "creator": self.creator_edit.text(),
-                "producer": self.producer_edit.text(),
-            })
+            new_doc.set_metadata(
+                {
+                    "title": self.title_edit.text(),
+                    "author": self.author_edit.text(),
+                    "subject": self.subject_edit.text(),
+                    "keywords": self.keywords_edit.text(),
+                    "creator": self.creator_edit.text(),
+                    "producer": self.producer_edit.text(),
+                }
+            )
             new_doc.save(out)
             new_doc.close()
             info_box(self, f"Metadata saved → {out}")

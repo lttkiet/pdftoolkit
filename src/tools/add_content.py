@@ -1,24 +1,24 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
+    QComboBox,
+    QDoubleSpinBox,
     QHBoxLayout,
-    QPushButton,
     QLabel,
     QLineEdit,
-    QTextEdit,
-    QComboBox,
+    QPushButton,
     QSpinBox,
-    QDoubleSpinBox,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtGui import QColor
+
 from src.utils.file_ops import (
-    open_pdf_path,
-    open_image_path,
-    save_pdf_path,
-    info_box,
     error_box,
+    info_box,
+    open_image_path,
+    open_pdf_path,
     page_range_from_str,
+    save_pdf_path,
 )
 
 
@@ -29,9 +29,7 @@ class AddContentTool(QWidget):
         self.doc = None
         layout = QVBoxLayout(self)
 
-        layout.addWidget(
-            QLabel("Add Content — Insert text or image overlays on pages.")
-        )
+        layout.addWidget(QLabel("Add Content — Insert text or image overlays on pages."))
 
         self.open_btn = QPushButton("Open PDF...")
         self.open_btn.clicked.connect(self._open)

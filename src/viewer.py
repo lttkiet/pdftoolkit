@@ -1,18 +1,17 @@
 import fitz
+from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtWidgets import (
-    QWidget,
     QHBoxLayout,
-    QVBoxLayout,
     QLabel,
-    QScrollArea,
     QListWidget,
     QListWidgetItem,
-    QSplitter,
     QPushButton,
-    QSpinBox,
+    QScrollArea,
+    QSplitter,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt, QSize, Signal
-from PySide6.QtGui import QPixmap, QImage
 
 
 class ThumbnailList(QWidget):

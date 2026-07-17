@@ -1,16 +1,16 @@
 import fitz
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
     QHBoxLayout,
-    QPushButton,
     QLabel,
-    QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt
-from src.utils.file_ops import open_pdf_path, save_pdf_path, info_box, error_box
+
+from src.utils.file_ops import error_box, info_box, open_pdf_path, save_pdf_path
 
 
 class ReorderTool(QWidget):
@@ -21,9 +21,7 @@ class ReorderTool(QWidget):
         self.page_order: list[int] = []
         layout = QVBoxLayout(self)
 
-        layout.addWidget(
-            QLabel("Reorder Pages — Drag or use buttons to rearrange page order.")
-        )
+        layout.addWidget(QLabel("Reorder Pages — Drag or use buttons to rearrange page order."))
         self.open_btn = QPushButton("Open PDF...")
         self.open_btn.clicked.connect(self._open)
         layout.addWidget(self.open_btn)
