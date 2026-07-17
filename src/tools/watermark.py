@@ -143,6 +143,25 @@ class WatermarkTool(QWidget):
             else:
                 pages = list(range(len(self.doc)))
 
+            is_image = self.type_combo.currentIndex() == 1
+            img_stream = None
+            if is_image:
+                if not self._image_path:
+                    error_box(self, "Select an image first.")
+                    return
+                img_opacity = self.img_opacity.value() / 100
+                if img_opacity < 1:
+                    import io
+
+                    from PIL import Image as PILImage
+
+                    pil_img = PILImage.open(self._image_path).convert("RGBA")
+                    alpha = pil_img.getchannel("A").point(lambda a: int(a * img_opacity))
+                    pil_img.putalpha(alpha)
+                    buf = io.BytesIO()
+                    pil_img.save(buf, "PNG")
+                    img_stream = buf.getvalue()
+
             new_doc = fitz.open()
             new_doc.insert_pdf(self.doc)
 
@@ -152,14 +171,15 @@ class WatermarkTool(QWidget):
                 center_x = rect.width / 2
                 center_y = rect.height / 2
 
-                if self.type_combo.currentIndex() == 0:
+                if not is_image:
                     opacity = self.opacity_slider.value() / 100
                     angle = self.angle_slider.value()
+                    pivot = fitz.Point(center_x, center_y)
                     page.insert_text(
                         fitz.Point(center_x - 80, center_y),
                         self.text_input.text(),
                         fontsize=self.font_size.value(),
-                        rotate=angle,
+                        morph=(pivot, fitz.Matrix(angle)),
                         color=(0.7, 0.7, 0.7),
                         overlay=True,
                         render_mode=0,
@@ -167,9 +187,6 @@ class WatermarkTool(QWidget):
                         fill_opacity=opacity,
                     )
                 else:
-                    if not self._image_path:
-                        error_box(self, "Select an image first.")
-                        return
                     w = self.img_width.value()
                     img_rect = fitz.Rect(
                         center_x - w / 2,
@@ -177,12 +194,10 @@ class WatermarkTool(QWidget):
                         center_x + w / 2,
                         center_y + w / 4,
                     )
-                    page.insert_image(
-                        img_rect,
-                        filename=self._image_path,
-                        overlay=True,
-                        alpha=self.img_opacity.value() / 100,
-                    )
+                    if img_stream is not None:
+                        page.insert_image(img_rect, stream=img_stream, overlay=True)
+                    else:
+                        page.insert_image(img_rect, filename=self._image_path, overlay=True)
 
             new_doc.save(out)
             new_doc.close()

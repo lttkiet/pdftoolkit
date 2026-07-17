@@ -18,6 +18,7 @@ class CompressTool(QWidget):
         super().__init__()
         self.main_window = main_window
         self.doc = None
+        self._orig_path = None
         layout = QVBoxLayout(self)
 
         layout.addWidget(
