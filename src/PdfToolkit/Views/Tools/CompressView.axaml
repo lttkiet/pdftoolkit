@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.CompressView"
+             x:DataType="vm:CompressViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Compress PDF" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Quality:" />
+    <Slider Minimum="0" Maximum="100" Value="{Binding Quality}" />
+
+    <CheckBox Content="Remove Unused Objects" IsChecked="{Binding RemoveUnusedObjects}" />
+
+    <Button Content="Compress" Command="{Binding CompressCommand}" HorizontalAlignment="Left" />
+
+    <TextBlock Text="{Binding ResultText}" />
+  </StackPanel>
+</UserControl>

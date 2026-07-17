@@ -1,0 +1,38 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.ConvertView"
+             x:DataType="vm:ConvertViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Convert" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Conversion Direction:" />
+    <ComboBox ItemsSource="{Binding ConversionDirections}" SelectedItem="{Binding ConversionDirection}" />
+
+    <TextBlock Text="Page Range:" />
+    <TextBox Text="{Binding PageRange}" PlaceholderText="e.g. 1-3,5" />
+
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <StackPanel Spacing="4">
+        <TextBlock Text="Output Format:" />
+        <ComboBox ItemsSource="{Binding OutputFormats}" SelectedItem="{Binding OutputFormat}" />
+      </StackPanel>
+      <StackPanel Spacing="4">
+        <TextBlock Text="DPI:" />
+        <NumericUpDown Value="{Binding Dpi}" Minimum="72" Maximum="600" />
+      </StackPanel>
+    </StackPanel>
+
+    <Button Content="Convert" Command="{Binding ConvertCommand}" HorizontalAlignment="Left" />
+
+    <Separator Margin="8,4" />
+
+    <ListBox ItemsSource="{Binding ImagePaths}" Height="120" />
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Select Images" Command="{Binding SelectImagesCommand}" />
+      <Button Content="Create PDF" Command="{Binding CreatePdfCommand}" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.ExtractTextView"
+             x:DataType="vm:ExtractTextViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Extract Text" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Page Range:" />
+    <TextBox Text="{Binding PageRange}" PlaceholderText="e.g. 1-3,5" />
+
+    <Button Content="Extract" Command="{Binding ExtractCommand}" HorizontalAlignment="Left" />
+
+    <TextBlock Text="Extracted Text:" />
+    <TextBox Text="{Binding ExtractedText}" IsReadOnly="True" AcceptsReturn="True" Height="200" />
+
+    <Button Content="Save" Command="{Binding SaveCommand}" HorizontalAlignment="Left" />
+  </StackPanel>
+</UserControl>

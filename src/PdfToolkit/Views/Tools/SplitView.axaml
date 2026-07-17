@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.SplitView"
+             x:DataType="vm:SplitViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Split PDF" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Page Range:" />
+    <TextBox Text="{Binding PageRange}" PlaceholderText="e.g. 1-3,5" />
+
+    <Button Content="Extract" Command="{Binding ExtractCommand}" HorizontalAlignment="Left" />
+  </StackPanel>
+</UserControl>
