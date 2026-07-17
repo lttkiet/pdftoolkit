@@ -11,12 +11,16 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         if (DataContext is MainWindowViewModel vm)
-        {
             vm.SetWindow(this);
-            vm.SelectedToolIndex = 0;
-        }
 
         KeyDown += OnKeyDown;
+    }
+
+    protected override void OnResized(WindowResizedEventArgs e)
+    {
+        base.OnResized(e);
+        if (DataContext is MainWindowViewModel vm)
+            vm.UpdateLayoutForWidth(ClientSize.Width);
     }
 
     private void OnKeyDown(object? sender, KeyEventArgs e)

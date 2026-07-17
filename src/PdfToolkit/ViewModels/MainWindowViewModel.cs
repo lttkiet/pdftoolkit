@@ -24,6 +24,15 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private UserControl? _currentToolView;
 
+    [ObservableProperty]
+    private bool _isPaneOpen = true;
+
+    [ObservableProperty]
+    private bool _isNarrow;
+
+    [ObservableProperty]
+    private SplitViewDisplayMode _displayMode = SplitViewDisplayMode.Inline;
+
     private readonly Dictionary<int, UserControl> _toolViews = new();
 
     public List<ToolItem> Tools { get; } =
@@ -47,9 +56,33 @@ public partial class MainWindowViewModel : ViewModelBase
         _window = window;
     }
 
+    public void UpdateLayoutForWidth(double width)
+    {
+        const double narrowThreshold = 960;
+        IsNarrow = width <= narrowThreshold;
+        if (IsNarrow)
+        {
+            DisplayMode = SplitViewDisplayMode.Overlay;
+            IsPaneOpen = false;
+        }
+        else
+        {
+            DisplayMode = SplitViewDisplayMode.Inline;
+            IsPaneOpen = true;
+        }
+    }
+
+    [RelayCommand]
+    private void TogglePane()
+    {
+        IsPaneOpen = !IsPaneOpen;
+    }
+
     partial void OnSelectedToolIndexChanged(int value)
     {
         LoadToolView(value);
+        if (IsNarrow && value >= 0)
+            IsPaneOpen = false;
     }
 
     private void LoadToolView(int index)
