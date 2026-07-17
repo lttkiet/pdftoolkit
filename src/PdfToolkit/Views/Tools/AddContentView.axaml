@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.AddContentView"
+             x:DataType="vm:AddContentViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Add Content" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Content Type:" />
+    <ComboBox ItemsSource="{Binding ContentTypes}" SelectedItem="{Binding ContentType}" />
+
+    <TextBlock Text="Text Content:" />
+    <TextBox Text="{Binding TextContent}" AcceptsReturn="True" Height="80" />
+
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <StackPanel Spacing="4">
+        <TextBlock Text="X Position:" />
+        <NumericUpDown Value="{Binding XPosition}" Minimum="0" />
+      </StackPanel>
+      <StackPanel Spacing="4">
+        <TextBlock Text="Y Position:" />
+        <NumericUpDown Value="{Binding YPosition}" Minimum="0" />
+      </StackPanel>
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <StackPanel Spacing="4">
+        <TextBlock Text="Font Size:" />
+        <NumericUpDown Value="{Binding FontSize}" Minimum="1" />
+      </StackPanel>
+      <StackPanel Spacing="4">
+        <TextBlock Text="Page Range:" />
+        <TextBox Text="{Binding PageRange}" PlaceholderText="e.g. 1-3,5" Width="120" />
+      </StackPanel>
+    </StackPanel>
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Add Text" Command="{Binding AddTextCommand}" />
+      <Button Content="Add Image" Command="{Binding AddImageCommand}" />
+      <Button Content="Select Image" Command="{Binding SelectImageCommand}" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

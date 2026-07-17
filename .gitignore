@@ -1,3 +1,4 @@
+## Python
 __pycache__/
 *.pyc
 *.pyo
@@ -9,3 +10,11 @@ dist/
 build/
 .ruff_cache/
 .pytest_cache/
+
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.DotSettings
+.vs/

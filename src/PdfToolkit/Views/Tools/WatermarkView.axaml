@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.WatermarkView"
+             x:DataType="vm:WatermarkViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Add Watermark" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Watermark Type:" />
+    <ComboBox ItemsSource="{Binding WatermarkTypes}" SelectedItem="{Binding WatermarkType}" />
+
+    <TextBlock Text="Text Content:" />
+    <TextBox Text="{Binding TextContent}" />
+
+    <StackPanel Orientation="Horizontal" Spacing="16">
+      <StackPanel Spacing="4">
+        <TextBlock Text="Font Size:" />
+        <NumericUpDown Value="{Binding FontSize}" Minimum="1" />
+      </StackPanel>
+      <StackPanel Spacing="4">
+        <TextBlock Text="Opacity (%):" />
+        <NumericUpDown Value="{Binding Opacity}" Minimum="0" Maximum="100" />
+      </StackPanel>
+      <StackPanel Spacing="4">
+        <TextBlock Text="Angle:" />
+        <NumericUpDown Value="{Binding Angle}" />
+      </StackPanel>
+    </StackPanel>
+
+    <TextBlock Text="Page Range:" />
+    <TextBox Text="{Binding PageRange}" PlaceholderText="e.g. 1-3,5" />
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Apply Text Watermark" Command="{Binding ApplyTextCommand}" />
+      <Button Content="Apply Image Watermark" Command="{Binding ApplyImageCommand}" />
+      <Button Content="Select Image" Command="{Binding SelectImageCommand}" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

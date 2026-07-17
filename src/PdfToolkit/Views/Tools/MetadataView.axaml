@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.MetadataView"
+             x:DataType="vm:MetadataViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Document Metadata" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="Title:" />
+    <TextBox Text="{Binding Title}" />
+
+    <TextBlock Text="Author:" />
+    <TextBox Text="{Binding Author}" />
+
+    <TextBlock Text="Subject:" />
+    <TextBox Text="{Binding Subject}" />
+
+    <TextBlock Text="Keywords:" />
+    <TextBox Text="{Binding Keywords}" />
+
+    <TextBlock Text="Creator:" />
+    <TextBox Text="{Binding Creator}" IsReadOnly="True" />
+
+    <TextBlock Text="Producer:" />
+    <TextBox Text="{Binding Producer}" IsReadOnly="True" />
+
+    <TextBlock Text="{Binding PageInfo}" />
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Reload" Command="{Binding ReloadCommand}" />
+      <Button Content="Save" Command="{Binding SaveCommand}" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

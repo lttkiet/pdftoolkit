@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.MergeView"
+             x:DataType="vm:MergeViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Merge PDFs" FontWeight="Bold" FontSize="18" />
+
+    <ListBox ItemsSource="{Binding FileList}" Height="200" />
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Add Files" Command="{Binding AddFilesCommand}" />
+      <Button Content="Remove" Command="{Binding RemoveCommand}" />
+      <Button Content="Move Up" Command="{Binding MoveUpCommand}" />
+      <Button Content="Move Down" Command="{Binding MoveDownCommand}" />
+    </StackPanel>
+
+    <Button Content="Merge" Command="{Binding MergeCommand}" HorizontalAlignment="Left" />
+  </StackPanel>
+</UserControl>

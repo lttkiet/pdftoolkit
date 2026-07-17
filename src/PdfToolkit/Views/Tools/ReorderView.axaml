@@ -1,0 +1,19 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.ReorderView"
+             x:DataType="vm:ReorderViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Reorder Pages" FontWeight="Bold" FontSize="18" />
+
+    <ListBox ItemsSource="{Binding PageList}" Height="250" />
+
+    <StackPanel Orientation="Horizontal" Spacing="8">
+      <Button Content="Move Up" Command="{Binding MoveUpCommand}" />
+      <Button Content="Move Down" Command="{Binding MoveDownCommand}" />
+    </StackPanel>
+
+    <Button Content="Save" Command="{Binding SaveCommand}" HorizontalAlignment="Left" />
+  </StackPanel>
+</UserControl>

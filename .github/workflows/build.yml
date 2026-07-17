@@ -2,47 +2,23 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
-    branches: [main]
-
-env:
-  PYTHONUNBUFFERED: "1"
+    branches: ['**']
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-      - run: pip install -r requirements-dev.txt
-      - run: ruff check .
-      - run: ruff format --check .
-
-  typecheck:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.13"
-      - run: pip install -r requirements.txt mypy
-      - run: mypy src/
-
-  test:
-    needs: [lint, typecheck]
+  build:
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install system deps
+          dotnet-version: "10.0.x"
+      - name: Install Avalonia dependencies (Linux)
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -50,31 +26,38 @@ jobs:
             libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
             libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
             libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
-            libfontconfig1 libdbus-1-3
-      - run: pip install -r requirements.txt -r requirements-dev.txt
-      - run: pytest -v
-
-  package:
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+            libfontconfig1 libdbus-1-3 libicu-dev
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+      - name: Publish (Linux)
+        if: runner.os == 'Linux'
+        run: dotnet publish src/PdfToolkit/PdfToolkit.csproj --configuration Release --self-contained --runtime linux-x64 --output publish/linux-x64
+      - name: Publish (Windows)
+        if: runner.os == 'Windows'
+        run: dotnet publish src/PdfToolkit/PdfToolkit.csproj --configuration Release --self-contained --runtime win-x64 --output publish/win-x64
+      - name: Publish (macOS)
+        if: runner.os == 'macOS'
+        run: dotnet publish src/PdfToolkit/PdfToolkit.csproj --configuration Release --self-contained --runtime osx-x64 --output publish/osx-x64
+      - name: Upload artifact (Linux)
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
         with:
-          python-version: "3.13"
-      - name: Install system deps
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libgl1 libegl1 libglib2.0-0 libxkbcommon0 \
-            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
-            libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
-            libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
-            libfontconfig1 libdbus-1-3
-      - run: pip install -r requirements.txt -r requirements-dev.txt
-      - run: pyinstaller PDFToolkit.spec
-      - uses: actions/upload-artifact@v6
+          name: PdfToolkit-linux-${{ github.sha }}
+          path: publish/linux-x64/
+          if-no-files-found: error
+      - name: Upload artifact (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
         with:
-          name: PDFToolkit-linux-${{ github.sha }}
-          path: dist/PDFToolkit
+          name: PdfToolkit-windows-${{ github.sha }}
+          path: publish/win-x64/
+          if-no-files-found: error
+      - name: Upload artifact (macOS)
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: PdfToolkit-macos-${{ github.sha }}
+          path: publish/osx-x64/
           if-no-files-found: error

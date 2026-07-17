@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:PdfToolkit.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
+             x:Class="PdfToolkit.Views.ViewerView"
+             x:DataType="vm:ViewerViewModel">
+
+    <Grid ColumnDefinitions="150,*">
+        <!-- Thumbnails -->
+        <Border Grid.Column="0" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}" BorderThickness="0,0,1,0">
+            <ScrollViewer>
+                <ItemsControl ItemsSource="{Binding Thumbnails}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}" Width="120" Height="160" Stretch="Uniform" Margin="4" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Main View -->
+        <DockPanel Grid.Column="1">
+            <!-- Page Image -->
+            <ScrollViewer DockPanel.Dock="Top" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Image Source="{Binding CurrentPageImage}" Stretch="Uniform" />
+            </ScrollViewer>
+
+            <!-- Navigation Bar -->
+            <Border DockPanel.Dock="Bottom" Padding="8,4" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}">
+                <Grid ColumnDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+                    <Button Grid.Column="0" Content="Prev" Command="{Binding PreviousPage}" Margin="4,0" />
+                    <TextBlock Grid.Column="1" Text="{Binding PageIndicator}" VerticalAlignment="Center" Margin="8,0" />
+                    <Button Grid.Column="2" Content="Next" Command="{Binding NextPage}" Margin="4,0" />
+                    <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="−" Command="{Binding ZoomOut}" Width="30" Margin="4,0" />
+                        <TextBlock Text="{Binding ZoomLevel, StringFormat={}{0:F1}x}" VerticalAlignment="Center" Margin="4,0" Width="40" />
+                        <Button Content="+" Command="{Binding ZoomIn}" Width="30" Margin="4,0" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DockPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:PdfToolkit.ViewModels.Tools"
+             x:Class="PdfToolkit.Views.Tools.EncryptView"
+             x:DataType="vm:EncryptViewModel">
+
+  <StackPanel Margin="16" Spacing="8">
+    <TextBlock Text="Encrypt / Decrypt" FontWeight="Bold" FontSize="18" />
+
+    <TextBlock Text="User Password:" />
+    <TextBox Text="{Binding UserPassword}" PasswordChar="*" />
+
+    <TextBlock Text="Owner Password:" />
+    <TextBox Text="{Binding OwnerPassword}" PasswordChar="*" />
+
+    <Button Content="Encrypt" Command="{Binding EncryptCommand}" HorizontalAlignment="Left" />
+
+    <Separator Margin="8,4" />
+
+    <TextBlock Text="Decrypt Password:" />
+    <TextBox Text="{Binding DecryptPassword}" PasswordChar="*" />
+
+    <Button Content="Decrypt" Command="{Binding DecryptCommand}" HorizontalAlignment="Left" />
+  </StackPanel>
+</UserControl>
