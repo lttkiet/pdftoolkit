@@ -1,7 +1,13 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QSpinBox, QSlider, QCheckBox
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QLabel,
+    QSpinBox,
+    QSlider,
+    QCheckBox,
 )
 from PySide6.QtCore import Qt
 from src.utils.file_ops import open_pdf_path, save_pdf_path, info_box, error_box
@@ -14,7 +20,11 @@ class CompressTool(QWidget):
         self.doc = None
         layout = QVBoxLayout(self)
 
-        layout.addWidget(QLabel("Compress PDF — Reduce file size by optimizing images and structure."))
+        layout.addWidget(
+            QLabel(
+                "Compress PDF — Reduce file size by optimizing images and structure."
+            )
+        )
 
         self.open_btn = QPushButton("Open PDF...")
         self.open_btn.clicked.connect(self._open)
@@ -55,7 +65,7 @@ class CompressTool(QWidget):
         path = open_pdf_path(self)
         if path:
             self.doc = fitz.open(path)
-            size_mb = self.doc.stream.tell() if hasattr(self.doc, 'stream') else 0
+            self._orig_path = path
             self.info_label.setText(f"Loaded: {path} ({len(self.doc)} pages)")
             self.compress_btn.setEnabled(True)
 
@@ -86,6 +96,7 @@ class CompressTool(QWidget):
                             continue
                         import io
                         from PIL import Image as PILImage
+
                         pil_img = PILImage.open(io.BytesIO(image_bytes))
                         if pil_img.mode == "RGBA":
                             pil_img = pil_img.convert("RGB")
@@ -107,16 +118,17 @@ class CompressTool(QWidget):
             new_doc.close()
 
             import os
-            orig_size = os.path.getsize(self.doc.name) if self.doc.name else 0
+
+            orig_size = os.path.getsize(self._orig_path) if self._orig_path else 0
             new_size = os.path.getsize(out)
             if orig_size > 0:
                 pct = (1 - new_size / orig_size) * 100
                 self.result_label.setText(
-                    f"Original: {orig_size/1024:.1f} KB → Compressed: {new_size/1024:.1f} KB "
+                    f"Original: {orig_size / 1024:.1f} KB → Compressed: {new_size / 1024:.1f} KB "
                     f"({pct:.1f}% reduction)"
                 )
             else:
-                self.result_label.setText(f"Saved: {new_size/1024:.1f} KB")
+                self.result_label.setText(f"Saved: {new_size / 1024:.1f} KB")
             info_box(self, f"Compressed PDF → {out}")
             self.main_window.statusbar.showMessage("PDF compressed")
         except Exception as e:

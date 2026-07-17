@@ -1,7 +1,15 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QLabel, QScrollArea,
-    QListWidget, QSplitter, QPushButton, QSpinBox
+    QWidget,
+    QHBoxLayout,
+    QVBoxLayout,
+    QLabel,
+    QScrollArea,
+    QListWidget,
+    QListWidgetItem,
+    QSplitter,
+    QPushButton,
+    QSpinBox,
 )
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QPixmap, QImage
@@ -34,7 +42,7 @@ class ThumbnailList(QWidget):
             img = QImage(pix.samples, pix.width, pix.height, pix.stride, QImage.Format_RGB888)
             pixmap = QPixmap.fromImage(img)
             item = QListWidgetItem(f"Page {i + 1}")
-            item.setIcon(pixmap if not pix.alpha else QPixmap.fromImage(img))
+            item.setIcon(pixmap)
             item.setSizeHint(QSize(130, 180))
             self.list_widget.addItem(item)
 

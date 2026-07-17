@@ -1,12 +1,23 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QLineEdit, QComboBox, QSlider, QSpinBox
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QLabel,
+    QLineEdit,
+    QComboBox,
+    QSlider,
+    QSpinBox,
 )
 from PySide6.QtCore import Qt
 from src.utils.file_ops import (
-    open_pdf_path, open_image_path, save_pdf_path,
-    info_box, error_box, page_range_from_str
+    open_pdf_path,
+    open_image_path,
+    save_pdf_path,
+    info_box,
+    error_box,
+    page_range_from_str,
 )
 
 
@@ -151,6 +162,8 @@ class WatermarkTool(QWidget):
                         color=(0.7, 0.7, 0.7),
                         overlay=True,
                         render_mode=0,
+                        stroke_opacity=opacity,
+                        fill_opacity=opacity,
                     )
                 else:
                     if not self._image_path:
@@ -158,13 +171,16 @@ class WatermarkTool(QWidget):
                         return
                     w = self.img_width.value()
                     img_rect = fitz.Rect(
-                        center_x - w / 2, center_y - w / 4,
-                        center_x + w / 2, center_y + w / 4,
+                        center_x - w / 2,
+                        center_y - w / 4,
+                        center_x + w / 2,
+                        center_y + w / 4,
                     )
                     page.insert_image(
                         img_rect,
                         filename=self._image_path,
                         overlay=True,
+                        alpha=self.img_opacity.value() / 100,
                     )
 
             new_doc.save(out)

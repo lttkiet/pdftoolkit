@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   push:
@@ -6,74 +6,83 @@ on:
   pull_request:
     branches: [main]
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+env:
+  PYTHONUNBUFFERED: "1"
 
+jobs:
+  lint:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.13"
+      - run: pip install ruff
+      - run: ruff check .
+      - run: ruff format --check .
 
-      - name: Install system dependencies
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install system deps
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            libgl1 \
-            libegl1 \
-            libglib2.0-0 \
-            libxkbcommon0 \
-            libxkbcommon-x11-0 \
-            libxcb-icccm4 \
-            libxcb-image0 \
-            libxcb-keysyms1 \
-            libxcb-randr0 \
-            libxcb-render-util0 \
-            libxcb-shape0 \
-            libxcb-xinerama0 \
-            libxcb-xfixes0 \
-            libfontconfig1 \
-            libdbus-1-3
+            libgl1 libegl1 libglib2.0-0 libxkbcommon0 \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+            libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
+            libfontconfig1 libdbus-1-3
+      - run: pip install -r requirements.txt mypy
+      - run: mypy src/
 
-      - name: Install Python dependencies
-        run: pip install -r requirements.txt
-
-      - name: Verify imports
+  test:
+    needs: [lint, typecheck]
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install system deps
         run: |
-          python -c "
-          from src.app import MainWindow
-          from src.tools.merge import MergeTool
-          from src.tools.split import SplitTool
-          from src.tools.rotate import RotateTool
-          from src.tools.reorder import ReorderTool
-          from src.tools.add_content import AddContentTool
-          from src.tools.extract_text import ExtractTextTool
-          from src.tools.compress import CompressTool
-          from src.tools.watermark import WatermarkTool
-          from src.tools.encrypt import EncryptTool
-          from src.tools.convert import ConvertTool
-          from src.tools.metadata import MetadataTool
-          print('All imports OK')
-          "
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgl1 libegl1 libglib2.0-0 libxkbcommon0 \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+            libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
+            libfontconfig1 libdbus-1-3
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: pytest -v
 
-      - name: Smoke test — core PDF ops
+  package:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - name: Install system deps
         run: |
-          python -c "
-          import fitz
-          doc = fitz.open()
-          page = doc.new_page()
-          page.insert_text((72, 72), 'Hello', fontsize=20)
-          doc.save('test.pdf')
-          doc.close()
-          doc = fitz.open('test.pdf')
-          assert 'Hello' in doc[0].get_text()
-          doc.close()
-          import os; os.remove('test.pdf')
-          print('Core PDF ops OK')
-          "
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgl1 libegl1 libglib2.0-0 libxkbcommon0 \
+            libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 \
+            libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 \
+            libxcb-shape0 libxcb-xinerama0 libxcb-xfixes0 \
+            libfontconfig1 libdbus-1-3
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: pyinstaller PDFToolkit.spec
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PDFToolkit-linux-${{ github.sha }}
+          path: dist/PDFToolkit/
