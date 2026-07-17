@@ -13,8 +13,8 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "10.0.x"
       - name: Install Avalonia dependencies (Linux)
@@ -42,21 +42,21 @@ jobs:
         run: dotnet publish src/PdfToolkit/PdfToolkit.csproj --configuration Release --self-contained --runtime osx-x64 --output publish/osx-x64
       - name: Upload artifact (Linux)
         if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PdfToolkit-linux-${{ github.sha }}
           path: publish/linux-x64/
           if-no-files-found: error
       - name: Upload artifact (Windows)
         if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PdfToolkit-windows-${{ github.sha }}
           path: publish/win-x64/
           if-no-files-found: error
       - name: Upload artifact (macOS)
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PdfToolkit-macos-${{ github.sha }}
           path: publish/osx-x64/

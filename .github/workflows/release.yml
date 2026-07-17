@@ -19,8 +19,8 @@ jobs:
             rid: osx-x64
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '10.0.x'
       - name: Install Avalonia dependencies (Linux)
@@ -40,7 +40,7 @@ jobs:
       - name: Publish
         run: dotnet publish src/PdfToolkit/PdfToolkit.csproj --configuration Release --self-contained --runtime ${{ matrix.rid }} --output publish/${{ matrix.rid }}
       - name: Upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: PdfToolkit-${{ matrix.rid }}
           path: publish/${{ matrix.rid }}/
@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: release-assets
       - name: Package into archives
