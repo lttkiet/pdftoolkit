@@ -1,5 +1,3 @@
-import os
-import fitz
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
 
@@ -18,9 +16,7 @@ def open_multi_pdf(parent=None) -> list[str]:
 
 
 def save_pdf_path(parent=None, default_name="output.pdf") -> str | None:
-    path, _ = QFileDialog.getSaveFileName(
-        parent, "Save PDF", default_name, "PDF Files (*.pdf)"
-    )
+    path, _ = QFileDialog.getSaveFileName(parent, "Save PDF", default_name, "PDF Files (*.pdf)")
     return path or None
 
 
@@ -64,9 +60,11 @@ def page_range_from_str(text: str, total: int) -> list[int]:
     pages = set()
     for part in text.split(","):
         part = part.strip()
+        if not part:
+            continue
         if "-" in part:
-            start, end = part.split("-", 1)
-            start, end = int(start.strip()), int(end.strip())
+            start_str, end_str = part.split("-", 1)
+            start, end = int(start_str.strip()), int(end_str.strip())
             for p in range(start, end + 1):
                 if 1 <= p <= total:
                     pages.add(p - 1)

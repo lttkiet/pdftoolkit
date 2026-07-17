@@ -1,12 +1,24 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QLineEdit, QTextEdit, QComboBox, QSpinBox, QDoubleSpinBox
+    QComboBox,
+    QDoubleSpinBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSpinBox,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtGui import QColor
+
 from src.utils.file_ops import (
-    open_pdf_path, open_image_path, save_pdf_path,
-    info_box, error_box, page_range_from_str
+    error_box,
+    info_box,
+    open_image_path,
+    open_pdf_path,
+    page_range_from_str,
+    save_pdf_path,
 )
 
 
@@ -93,6 +105,11 @@ class AddContentTool(QWidget):
         self.iw_spin.setRange(1, 9999)
         self.iw_spin.setValue(200)
         ipos_row.addWidget(self.iw_spin)
+        ipos_row.addWidget(QLabel("Height:"))
+        self.ih_spin = QSpinBox()
+        self.ih_spin.setRange(1, 9999)
+        self.ih_spin.setValue(200)
+        ipos_row.addWidget(self.ih_spin)
         iw.addLayout(ipos_row)
 
         self.image_widget.hide()
@@ -156,7 +173,7 @@ class AddContentTool(QWidget):
                     self.ix_spin.value(),
                     self.iy_spin.value(),
                     self.ix_spin.value() + self.iw_spin.value(),
-                    self.iy_spin.value() + self.iw_spin.value(),
+                    self.iy_spin.value() + self.ih_spin.value(),
                 )
                 for idx in pages:
                     page = new_doc[idx]

@@ -1,10 +1,16 @@
 import fitz
-from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QLineEdit, QListWidget, QListWidgetItem
-)
 from PySide6.QtCore import Qt
-from src.utils.file_ops import open_pdf_path, save_pdf_path, info_box, error_box
+from PySide6.QtWidgets import (
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QListWidgetItem,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
+
+from src.utils.file_ops import error_box, info_box, open_pdf_path, save_pdf_path
 
 
 class ReorderTool(QWidget):
@@ -50,14 +56,15 @@ class ReorderTool(QWidget):
             self.info_label.setText(f"Loaded: {path} ({len(self.doc)} pages)")
             self.page_list.clear()
             for i in range(len(self.doc)):
-                self.page_list.addItem(f"Page {i + 1}")
+                item = QListWidgetItem(f"Page {i + 1}")
+                item.setData(Qt.UserRole, i)
+                self.page_list.addItem(item)
             self.save_btn.setEnabled(True)
 
     def _get_order(self):
         order = []
         for i in range(self.page_list.count()):
-            text = self.page_list.item(i).text()
-            order.append(int(text.split()[-1]) - 1)
+            order.append(self.page_list.item(i).data(Qt.UserRole))
         return order
 
     def _up(self):

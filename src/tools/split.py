@@ -1,11 +1,19 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QLineEdit, QCheckBox
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
+
 from src.utils.file_ops import (
-    open_pdf_path, save_pdf_path, info_box, error_box,
-    page_range_from_str
+    error_box,
+    info_box,
+    open_pdf_path,
+    page_range_from_str,
+    save_pdf_path,
 )
 
 

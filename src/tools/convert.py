@@ -1,12 +1,22 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QComboBox, QSpinBox, QLineEdit
+    QComboBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt
+
 from src.utils.file_ops import (
-    open_pdf_path, open_image_path, save_pdf_path, save_image_path,
-    info_box, error_box, page_range_from_str
+    error_box,
+    info_box,
+    open_pdf_path,
+    page_range_from_str,
+    save_image_path,
+    save_pdf_path,
 )
 
 
@@ -26,6 +36,8 @@ class ConvertTool(QWidget):
         self.open_btn = QPushButton("Open PDF...")
         self.open_btn.clicked.connect(self._open)
         row1.addWidget(self.open_btn)
+        self.info_label = QLabel("No file loaded")
+        row1.addWidget(self.info_label)
         row1.addWidget(QLabel("Pages:"))
         self.pages_input = QLineEdit()
         self.pages_input.setPlaceholderText("all")
@@ -71,7 +83,7 @@ class ConvertTool(QWidget):
         path = open_pdf_path(self)
         if path:
             self.doc = fitz.open(path)
-            self.info_label_text = f"Loaded: {path} ({len(self.doc)} pages)"
+            self.info_label.setText(f"Loaded: {path} ({len(self.doc)} pages)")
             self.pdf_to_img_btn.setEnabled(True)
 
     def _pdf_to_images(self):
@@ -104,9 +116,12 @@ class ConvertTool(QWidget):
 
     def _select_images(self):
         from PySide6.QtWidgets import QFileDialog
+
         paths, _ = QFileDialog.getOpenFileNames(
-            self, "Select Images", "",
-            "Images (*.png *.jpg *.jpeg *.bmp *.tiff);;All Files (*)"
+            self,
+            "Select Images",
+            "",
+            "Images (*.png *.jpg *.jpeg *.bmp *.tiff);;All Files (*)",
         )
         if paths:
             self._img_paths = paths

@@ -1,15 +1,20 @@
 import fitz
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
-    QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QListWidget,
-    QListWidgetItem, QStackedWidget, QToolBar, QLabel, QSplitter,
-    QStatusBar, QPushButton, QFrame
+    QHBoxLayout,
+    QListWidget,
+    QListWidgetItem,
+    QMainWindow,
+    QSplitter,
+    QStackedWidget,
+    QStatusBar,
+    QToolBar,
+    QWidget,
 )
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QAction, QIcon, QPixmap
 
+from src.utils.file_ops import info_box, open_pdf_path
 from src.viewer import PDFViewer
-from src.utils.file_ops import open_pdf_path, info_box
-
 
 TOOL_ITEMS = [
     ("Viewer", "Open and view PDF files"),
@@ -54,12 +59,16 @@ class MainWindow(QMainWindow):
 
         zoom_in = QAction("Zoom In", self)
         zoom_in.setShortcut("Ctrl+=")
-        zoom_in.triggered.connect(lambda: self.viewer.zoom_in() if hasattr(self, "viewer") else None)
+        zoom_in.triggered.connect(
+            lambda: self.viewer.zoom_in() if hasattr(self, "viewer") else None
+        )
         toolbar.addAction(zoom_in)
 
         zoom_out = QAction("Zoom Out", self)
         zoom_out.setShortcut("Ctrl+-")
-        zoom_out.triggered.connect(lambda: self.viewer.zoom_out() if hasattr(self, "viewer") else None)
+        zoom_out.triggered.connect(
+            lambda: self.viewer.zoom_out() if hasattr(self, "viewer") else None
+        )
         toolbar.addAction(zoom_out)
 
     def _setup_ui(self):
@@ -138,6 +147,7 @@ class MainWindow(QMainWindow):
         if row not in self.tool_widgets:
             mod_path, cls_name = self._tool_modules[row]
             import importlib
+
             mod = importlib.import_module(mod_path)
             cls = getattr(mod, cls_name)
             widget = cls(self)

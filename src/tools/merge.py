@@ -1,9 +1,14 @@
 import fitz
 from PySide6.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel,
-    QListWidget, QListWidgetItem, QFileDialog
+    QHBoxLayout,
+    QLabel,
+    QListWidget,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
-from src.utils.file_ops import open_multi_pdf, save_pdf_path, info_box, error_box
+
+from src.utils.file_ops import error_box, info_box, open_multi_pdf, save_pdf_path
 
 
 class MergeTool(QWidget):
